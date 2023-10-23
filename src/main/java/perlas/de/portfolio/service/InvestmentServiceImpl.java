@@ -1,6 +1,8 @@
 package perlas.de.portfolio.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,15 @@ public class InvestmentServiceImpl implements InvestmentService {
 	@Autowired
 	private InvestmentRepository investmentRepository;
 
+	
+	@Override
 	public Investment saveInvestment(Investment investment) {
 
 		return investmentRepository.save(investment); // this will be shown in postman
 	}
 
+	
+	@Override
 	public List<Investment> getAllInvestments() {
 
 		return investmentRepository.findAll();
@@ -29,6 +35,8 @@ public class InvestmentServiceImpl implements InvestmentService {
 		return investmentRepository.findById(id).orElse(null);
 	}
 
+	
+	@Override
 	public Investment updateInvestment(Investment investment) {
 
 		Investment investmentToUpdate = investmentRepository.findById(investment.getId()).orElse(null);
@@ -64,7 +72,9 @@ public class InvestmentServiceImpl implements InvestmentService {
 
 		return null; // if no investment was found just return null
 	}
+	
 
+	@Override
 	public String deleteInvestment(int id) {
 
 		if (investmentRepository.existsById(id)) {
@@ -76,4 +86,40 @@ public class InvestmentServiceImpl implements InvestmentService {
 		}
 	}
 
+	
+	@Override
+	public List<Investment> listInvestmentByType(String type) {
+		List<Investment> investmentsByType = investmentRepository
+				.findAll()
+				.stream()
+				.filter(investment -> investment.getType().equalsIgnoreCase(type))
+				.collect(Collectors.toList());
+
+		return investmentsByType;
+	}
+
+
+	@Override
+	public List<Investment> listInvestmentByCategory(String category) {
+		List<Investment> investmentByCategory = investmentRepository
+				.findAll()
+				.stream()
+				.filter(investment -> investment.getCategory().equalsIgnoreCase(category))
+				.collect(Collectors.toList());
+		return investmentByCategory;
+	}
+
+
+	@Override
+	public List<Investment> listInvestmentByToken(String token) {
+		List<Investment> investmentByToken = investmentRepository
+				.findAll()
+				.stream()
+				.filter(investment -> investment.getToken().equalsIgnoreCase(token))
+				.collect(Collectors.toList());
+		
+		return investmentByToken;
+	}
+
+	
 }

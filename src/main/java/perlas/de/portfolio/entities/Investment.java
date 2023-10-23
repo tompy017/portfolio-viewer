@@ -7,7 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -133,6 +136,19 @@ public class Investment {
 		this.type = type;
 	}
 	
+	
+	//without purchasedDate -> will use today's date as purchased date
+	public Investment(int id, String token, String name, double qty, double price, String category, String type) {
+		super();
+		this.id = id;
+		this.token = token;
+		this.name = name;
+		this.qty = qty;
+		this.price = price;
+		this.purchasedDate = LocalDate.now();
+		this.category = category;
+		this.type = type;
+	}
 	
 
 	

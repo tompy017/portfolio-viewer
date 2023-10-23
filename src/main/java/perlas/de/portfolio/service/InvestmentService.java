@@ -16,6 +16,11 @@ public interface InvestmentService {
 	
 	public String deleteInvestment(int id);
 	
+	public List<Investment> listInvestmentByType(String type);
+	
+	public List<Investment> listInvestmentByCategory(String category);
+	
+	public List<Investment> listInvestmentByToken(String token);
 	
 
 }
