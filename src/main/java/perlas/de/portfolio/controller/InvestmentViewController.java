@@ -26,40 +26,34 @@ public class InvestmentViewController {
 	@Autowired
 	private InvestmentService investmentService;
 
-	@GetMapping("/")
-	public String listAllInvestments(Model model) {
-		model.addAttribute("investments", investmentService.getAllInvestments());
-		return "investments"; // returns investments.html
-	}
+
+	//					CREATE
 
 	@GetMapping("/new")
 	public String newInvestmentForm(Model model) {
 		Investment investment = new Investment();
 		model.addAttribute("investment", investment);
-
+		
 		return "new_investment"; // .html
 	}
-
+	
+	
 	@PostMapping("/")
 	public String saveInvestment(@ModelAttribute("investment") Investment investment) {
 		investmentService.saveInvestment(investment);
 
 		return "redirect:/investments/"; // save the investment and goes back to the list
 	}
-
-	@GetMapping("/edit/{id}")
-	public String updateInvestmentForm(@PathVariable int id, Model model) {
-		model.addAttribute("investment", investmentService.getInvestmentById(id));
-		return "edit_investment";
-	}
-
+	
+	
+	//					UPDATE
 	@PostMapping("/{id}")
 	public String updateInvestment(@PathVariable int id, 
 			@ModelAttribute("investment") Investment investment, 
 			Model model) {
-
+		
 		Investment investmentToUpdate = investmentService.getInvestmentById(id);
-
+		
 		investmentToUpdate.setName(investment.getName());
 		investmentToUpdate.setPrice(investment.getPrice());		
 		investmentToUpdate.setQty(investment.getQty());
@@ -72,18 +66,36 @@ public class InvestmentViewController {
 		
 		
 		investmentService.updateInvestment(investmentToUpdate);  // save
-
+		
 		return "redirect:/investments/";                         // redirect
 	}
-
+	
+	@GetMapping("/edit/{id}")
+	public String updateInvestmentForm(@PathVariable int id, Model model) {
+		model.addAttribute("investment", investmentService.getInvestmentById(id));
+		return "edit_investment";
+	}
+	
+	
+	//					DELETE
 	
 	@GetMapping("/del/{id}")
 	public String deleteInvestment(@PathVariable int id) {
 		investmentService.deleteInvestment(id);
-
+		
 		return "redirect:/investments/";
 	}
 	
+	
+	//					READ
+	
+	@GetMapping("/")
+	public String listAllInvestments(Model model) {
+		model.addAttribute("investments", investmentService.getAllInvestments());
+		return "investments"; // returns investments.html
+	}
+	
+
 	
 	@GetMapping("/by_type/{type}")
 	public String listInvestmentsByType(@PathVariable String type, Model model) {
@@ -113,7 +125,6 @@ public class InvestmentViewController {
 		return "filtered_investments";
 	}
 	
-	
 	@GetMapping("/by_token/{token}")
 	public String listInvestmentsByToken(@PathVariable String token, Model model) {
 		
@@ -127,5 +138,6 @@ public class InvestmentViewController {
 		
 		return "filtered_investments";
 	}
-
+	
+	
 }
