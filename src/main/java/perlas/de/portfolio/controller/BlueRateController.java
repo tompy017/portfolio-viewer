@@ -7,6 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import perlas.de.portfolio.fetchers.BlueRateFetcher;
 
+
+/*
+ * Controller to make the GET request to fetch 
+ * the average blue rate  using the BlueRateFetcher
+ */
+
+
+
 @RestController
 @RequestMapping("/api/exchange-rates")
 public class BlueRateController {

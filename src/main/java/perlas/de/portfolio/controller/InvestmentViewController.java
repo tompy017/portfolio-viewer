@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import perlas.de.portfolio.entities.Investment;
 import perlas.de.portfolio.service.InvestmentService;
 
-
+/*
+ * Webapp controller
+ */
 
 @Controller
 @RequestMapping("/investments")
