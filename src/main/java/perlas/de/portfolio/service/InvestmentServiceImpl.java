@@ -1,6 +1,11 @@
 package perlas.de.portfolio.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +124,35 @@ public class InvestmentServiceImpl implements InvestmentService {
 		
 		return investmentByToken;
 	}
+
+
+	@Override
+	public Set<String> getAllInvestmentTypes() {
+		Set<String> types = new HashSet<>();
+		
+		// get unique investment types
+		for (Investment investment : investmentRepository.findAll()) {
+			types.add(investment.getType());
+		}
+		
+		return types;
+	}
+
+
+	@Override
+	public Set<String> getAllInvestmentCategories() {
+		Set<String> categories = new HashSet<>();
+		
+		//get unique category types
+		for (Investment investment : investmentRepository.findAll()) {
+			categories.add(investment.getCategory());
+		}
+		
+		return categories;
+	}
+
+
+	
 
 	
 }

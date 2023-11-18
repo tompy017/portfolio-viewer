@@ -1,6 +1,8 @@
 package perlas.de.portfolio.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import perlas.de.portfolio.entities.Investment;
 
@@ -21,6 +23,10 @@ public interface InvestmentService {
 	public List<Investment> listInvestmentByCategory(String category);
 	
 	public List<Investment> listInvestmentByToken(String token);
+	
+	public Set<String> getAllInvestmentTypes();
+	
+	public Set<String> getAllInvestmentCategories();
 	
 
 }

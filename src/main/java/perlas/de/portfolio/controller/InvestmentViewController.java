@@ -1,6 +1,7 @@
 package perlas.de.portfolio.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import perlas.de.portfolio.entities.Investment;
 import perlas.de.portfolio.service.InvestmentService;
+import perlas.de.portfolio.service.InvestmentServiceImpl;
 
 /*
  * Webapp controller
@@ -141,5 +143,21 @@ public class InvestmentViewController {
 		return "filtered_investments";
 	}
 	
+	
+	@GetMapping("/summary")
+	public String portfolioSummary(Model model) {
+		
+		Set<String> investmentTypes = investmentService.getAllInvestmentTypes();
+		Set<String> investmentCategories = investmentService.getAllInvestmentCategories();
+		
+		model.addAttribute("investmentTypes", investmentTypes);
+		model.addAttribute("investmentCategories", investmentCategories);
+		
+		return "investment-summary";
+		
+	}
+	
+	//TODO: modificar return para que todo retorne el template "investments" al filtrar
+	//TODO: agregar todas las inversiones al model de porffolioSummary para obtener los totales
 	
 }
