@@ -18,6 +18,8 @@ public interface InvestmentService {
 	
 	public String deleteInvestment(int id);
 	
+	public List<Investment> listInvestentByCurrency(String currency);
+	
 	public List<Investment> listInvestmentByType(String type);
 	
 	public List<Investment> listInvestmentByCategory(String category);

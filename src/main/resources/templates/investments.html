@@ -29,6 +29,7 @@
 						<th scope="col">Purchased Date</th>
 						<th scope="col">Category</th>
 						<th scope="col">Type</th>
+						<th scope="col">Currency</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
 					</tr>
@@ -50,6 +51,9 @@
 	                    <td>
                         	<a th:href="@{/investments/by_type/{type}(type=${investment.type})}" class="btn btn-outline-dark" th:text="${investment.type}"></a>
                     	</td>
+                    	<td>
+							<a th:href="@{/investments/by_currency/{currency}(currency=${investment.currency})}" class="btn btn-outline-dark" th:text="${investment.currency}"></a>
+						</td>
 						<td>
 							<a th:href="@{/investments/edit/{id}(id=${investment.id})}" class="btn btn-light btn-sm">
 								<i class="material-icons">edit</i>

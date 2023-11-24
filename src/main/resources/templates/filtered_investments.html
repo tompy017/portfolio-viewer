@@ -13,7 +13,7 @@
 <body>
 	<div class="container mx-auto py-4">
 		<div class="row">
-			<h1 class="text-center" id="title" th:text="${title}">None investments to show</h1>
+			<h1 class="text-center" id="title" th:text="${title}">No investments to show</h1>
 
 		</div>
 		
@@ -29,6 +29,7 @@
 						<th scope="col">Purchased Date</th>
 						<th scope="col">Category</th>
 						<th scope="col">Type</th>
+						<th scope="col">Currency</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
 					</tr>
@@ -43,6 +44,7 @@
 						<td th:text="${investment.purchasedDate}"></td>
 						<td th:text="${investment.category}"></td>
 						<td th:text="${investment.type}"></td>
+						<td th:text="${investment.currency}"></td>
 						<td>
 							<a th:href="@{/investments/edit/{id}(id=${investment.id})}" class="btn btn-light btn-sm">
 								<i class="material-icons">edit</i>

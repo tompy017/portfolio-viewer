@@ -1,5 +1,6 @@
 package perlas.de.portfolio.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,11 @@ public class InvestmentViewController {
 	
 	@PostMapping("/")
 	public String saveInvestment(@ModelAttribute("investment") Investment investment) {
+		
+		if (investment.getPurchasedDate() == null) {
+			investment.setPurchasedDate(LocalDate.now());
+		}
+		
 		investmentService.saveInvestment(investment);
 
 		return "redirect:/investments/"; // save the investment and goes back to the list
@@ -62,7 +68,10 @@ public class InvestmentViewController {
 		investmentToUpdate.setPrice(investment.getPrice());		
 		investmentToUpdate.setQty(investment.getQty());
 		investmentToUpdate.setToken(investment.getToken());
+		investmentToUpdate.setCategory(investment.getCategory());
 		investmentToUpdate.setType(investment.getType());
+		investmentToUpdate.setCurrency(investment.getCurrency());
+		
 		// if no date selected on the form, keep with the original purchased date
 		if (investment.getPurchasedDate() != null) {
 			investmentToUpdate.setPurchasedDate(investment.getPurchasedDate());			
@@ -125,6 +134,19 @@ public class InvestmentViewController {
 		
 		model.addAttribute("investments", investments);
 		model.addAttribute("category", category);
+		
+		return "filtered_investments";
+	}
+	
+	@GetMapping("/by_currency/{currency}")
+	public String listInvestmentByCurrency (@PathVariable String currency, Model model) {
+		
+		String title = currency + " Investments";
+		model.addAttribute("title", title);
+		
+		List<Investment> investments = investmentService.listInvestentByCurrency(currency);
+		model.addAttribute("investments", investments);
+		model.addAttribute("currency",currency);
 		
 		return "filtered_investments";
 	}

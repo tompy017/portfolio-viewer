@@ -47,6 +47,17 @@ public class Investment {
 	
 	@Column(name = "type")
 	private String type;
+	
+	@Column(columnDefinition = "varchar(10) default 'usd'")
+	private String currency;
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
 
 	public String getCategory() {
 		return category;
@@ -124,7 +135,7 @@ public class Investment {
 	public Investment() {}
 
 	public Investment(int id, String token, String name, double qty, double price, LocalDate purchasedDate,
-			String category, String type) {
+			String category, String type, String currency) {
 		super();
 		this.id = id;
 		this.token = token;
@@ -134,11 +145,12 @@ public class Investment {
 		this.purchasedDate = purchasedDate;
 		this.category = category;
 		this.type = type;
+		this.currency = currency;
 	}
 	
 	
 	//without purchasedDate -> will use today's date as purchased date
-	public Investment(int id, String token, String name, double qty, double price, String category, String type) {
+	public Investment(int id, String token, String name, double qty, double price, String category, String type, String currency) {
 		super();
 		this.id = id;
 		this.token = token;
@@ -148,6 +160,7 @@ public class Investment {
 		this.purchasedDate = LocalDate.now();
 		this.category = category;
 		this.type = type;
+		this.currency = currency;
 	}
 	
 

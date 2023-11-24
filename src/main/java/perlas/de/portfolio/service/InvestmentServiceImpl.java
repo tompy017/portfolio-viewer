@@ -68,6 +68,10 @@ public class InvestmentServiceImpl implements InvestmentService {
 			if (investment.getType() != null) {
 				investmentToUpdate.setType(investment.getType());
 			}
+			
+			if (investment.getCurrency() != null) {
+				investmentToUpdate.setCurrency(investment.getCurrency());
+			}
 
 			investmentRepository.save(investmentToUpdate);
 
@@ -152,6 +156,18 @@ public class InvestmentServiceImpl implements InvestmentService {
 	}
 
 
+	@Override
+	public List<Investment> listInvestentByCurrency(String currency) {
+		List<Investment> investmentsByCurrency = investmentRepository
+				.findAll()
+				.stream()
+				.filter(investment -> investment.getCurrency().equalsIgnoreCase(currency))
+				.collect(Collectors.toList());
+		
+		return investmentsByCurrency;
+	}
+
+	//TODO: method para calcular el total de la inversion usando los fetchers para calcular el total del portfolio y % de cada type y category
 	
 
 	

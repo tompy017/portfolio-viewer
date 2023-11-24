@@ -41,16 +41,37 @@
 							<input type="date" name="inputPurchasedDate" id="inputPurchasedDate"
 								th:field="*{purchasedDate}" class="form-control"></input>
 						</div>
-						<div class="form-group">
-							<label for="inputCategory">Category</label>
-							<input type="text" name="inputCategory" id="inputCategory" th:field="*{category}"
-								class="form-control" placeholder="crypto/fiat"></input>
+						
+						<div class="form-group py-2">
+							<label for="selectCategory">Category</label>
+							<select class="form-control" name="selectCategory" id="selectCategory" th:field="*{category}">
+								<option th:value="fiat">FIAT</option>
+								<option th:value="crypto">CRYPTO</option>
+							</select>
 						</div>
+						
+						
+<!--						<div class="form-group">-->
+<!--							<label for="inputCategory">Category</label>-->
+<!--							<input type="text" name="inputCategory" id="inputCategory" th:field="*{category}"-->
+<!--								class="form-control" placeholder="crypto/fiat"></input>-->
+<!--						</div>-->
 						<div class="form-group">
 							<label for="inputType">Type</label>
 							<input type="text" name="inputType" id="inputType" th:field="*{type}" class="form-control"
 								placeholder="cash/stable/non-stable"></input>
 						</div>
+						
+						
+						<div class="form-group">
+							<label for="inputCurrency">Currency</label>
+							<input type="text" name="inputCurrency" id="inputCurrency" th:field="*{currency}" class="form-control"
+								placeholder="ars/usd/gbp/euro"></input>
+						</div>
+						
+						
+						
+						
 						<div class="box-footer pt-4">
 							<div class="row">
 								<button class="btn btn-primary">Save</button>
