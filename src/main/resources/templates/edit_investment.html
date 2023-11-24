@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,70 +7,65 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-
 <body>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
 				<h1 class="text-center" id="title" name="title">Edit Investments</h1>
 				<div class="card-body">
+<!--					FORM-->
 					<form th:action="@{/investments/{id}(id=${investment.id})}" th:object="${investment}" method="POST">
 						<div class="form-group">
 							<label for="inputToken">Token</label>
 							<input type="text" name="inputToken" id="inputToken" th:field="*{token}"
 								class="form-control" value="Tkn"></input>
 						</div>
+<!--						NAME-->
 						<div class="form-group">
 							<label for="inputName">Name</label>
 							<input type="text" name="inputName" id="inputName" th:field="*{name}" class="form-control"
 								placeholder="Name"></input>
 						</div>
+<!--						QTY-->
 						<div class="form-group">
 							<label for="inputQty">Qty</label>
 							<input type="number" step="0.01" name="inputQty" id="inputQty" th:field="*{qty}"
 								class="form-control" placeholder="Qty"></input>
 						</div>
+<!--						PRICE-->
 						<div class="form-group">
 							<label for="inputPrice">Price</label>
 							<input type="number" step="0.01" name="inputPrice" id="inputPrice" th:field="*{price}"
 								class="form-control" placeholder="Purchased price"></input>
 						</div>
+<!--						DATE-->
 						<div class="form-group">
 							<label for="inputPurchasedDate">Purchased date</label>
 							<input type="date" name="inputPurchasedDate" id="inputPurchasedDate"
 								th:field="*{purchasedDate}" class="form-control"></input>
 						</div>
-						
+<!--						CATEGORY-->
 						<div class="form-group py-2">
 							<label for="selectCategory">Category</label>
-							<select class="form-control" name="selectCategory" id="selectCategory" th:field="*{category}">
+							<select class="form-control" name="selectCategory" id="selectCategory"
+								th:field="*{category}">
 								<option th:value="fiat">FIAT</option>
 								<option th:value="crypto">CRYPTO</option>
 							</select>
 						</div>
-						
-						
-<!--						<div class="form-group">-->
-<!--							<label for="inputCategory">Category</label>-->
-<!--							<input type="text" name="inputCategory" id="inputCategory" th:field="*{category}"-->
-<!--								class="form-control" placeholder="crypto/fiat"></input>-->
-<!--						</div>-->
+<!--						TYPE-->
 						<div class="form-group">
 							<label for="inputType">Type</label>
 							<input type="text" name="inputType" id="inputType" th:field="*{type}" class="form-control"
 								placeholder="cash/stable/non-stable"></input>
 						</div>
-						
-						
+<!--						CURRENCY-->
 						<div class="form-group">
 							<label for="inputCurrency">Currency</label>
-							<input type="text" name="inputCurrency" id="inputCurrency" th:field="*{currency}" class="form-control"
-								placeholder="ars/usd/gbp/euro"></input>
+							<input type="text" name="inputCurrency" id="inputCurrency" th:field="*{currency}"
+								class="form-control" placeholder="ars/usd/gbp/euro"></input>
 						</div>
-						
-						
-						
-						
+<!--						SAVE BUTTON-->
 						<div class="box-footer pt-4">
 							<div class="row">
 								<button class="btn btn-primary">Save</button>
@@ -79,6 +73,7 @@
 						</div>
 					</form>
 				</div>
+<!--				CANCEL BUTTON-->
 				<div class="col-lg-3">
 					<a th:href="@{/investments/}" class="btn btn-secondary btn-sm mb-3 ">Cancel</a>
 				</div>
@@ -86,4 +81,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

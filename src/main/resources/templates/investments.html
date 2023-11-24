@@ -15,7 +15,7 @@
 		<div class="row">
 			<h1 class="text-center" id="title" name="title">Investments</h1>
 		</div>
-		
+<!--		TABLE -->
 		<div class="container mt-auto table-responsive">
 			<table class="table mt-4 table-hover">
 				<caption>List of investments</caption>
@@ -34,6 +34,7 @@
 						<th scope="col">Delete</th>
 					</tr>
 				</thead>
+<!--				POPULATED DATA WITH TYMELEAF -->
 				<tbody class="table-group-divider">
 					<tr th:each="investment : ${investments}">
 						<th scope="row" th:text="${investment.id}"></th>
@@ -54,6 +55,7 @@
                     	<td>
 							<a th:href="@{/investments/by_currency/{currency}(currency=${investment.currency})}" class="btn btn-outline-dark" th:text="${investment.currency}"></a>
 						</td>
+<!--					EDIT AND DELETE BUTTONS -->
 						<td>
 							<a th:href="@{/investments/edit/{id}(id=${investment.id})}" class="btn btn-light btn-sm">
 								<i class="material-icons">edit</i>
@@ -68,6 +70,7 @@
 				</tbody>
 			</table>
 		</div>
+<!--		BOTTOM BUTTONS -->
 		<div class="d-flex justify-content-center">
 			<a th:href="@{/investments/new}" class="btn btn-primary btn-block">Add investment</a>
 		</div>
