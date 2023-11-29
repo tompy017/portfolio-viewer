@@ -13,39 +13,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CryptoPriceFetcher {
 	
 	private final String apiUrl = "https://api.coingecko.com/api/v3/simple/price";
-	
-	@Autowired
-	private RestTemplate restTemplate;  //allows to make HTTP requests to  external services
-	
-	@Autowired
-	private ObjectMapper objectMapper;  //used to serialize and deserialize JSON data
-	
-	
-	public double getActualValueInUSD(String tokenName) {
-		
-		String json;
-		double actualValue = -1.0;
-		String urlWithTokenName = apiUrl + "?ids=" + tokenName + "&vs_currencies=usd";
-		
-		ResponseEntity<Object> response = restTemplate
-				.getForEntity(urlWithTokenName, Object.class);
-		
-		try {
-			json = objectMapper.writeValueAsString(response.getBody());
-			
-			JsonNode node = objectMapper.readTree(json); //navigate through the json structure
-			
-			actualValue = node.get(tokenName).get("usd").asDouble();
 
-		} catch (JsonProcessingException e){
-			e.printStackTrace();
-			
-		}
-		
-		return actualValue;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	}
-	
+    @Autowired
+    private ObjectMapper objectMapper;
 
+    public double getActualValueInUSD(String tokenName) {
+    	
+        String urlWithTokenName = apiUrl + "?ids=" + tokenName + "&vs_currencies=usd";
+
+        ResponseEntity<String> responseEntity = restTemplate.
+        		getForEntity(urlWithTokenName, String.class);
+
+        try {
+        	
+        	
+        	JsonNode jsonNode = objectMapper.readTree(responseEntity.getBody());
+            JsonNode priceNode = jsonNode.get(tokenName).get("usd");
+            
+            return priceNode.asDouble();
+            
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error parsing JSON response", e);
+        }
+    }
 
 }

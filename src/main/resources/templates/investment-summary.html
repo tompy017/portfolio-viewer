@@ -34,6 +34,42 @@
 		</div>
 	</div>
 
+
+
+	<div class="container mx-auto py-4">
+		<div class="row">
+			<h1 class="text-center" id="title" name="title">Investments</h1>
+		</div>
+<!--		TABLE -->
+		<div class="container mt-auto table-responsive">
+			<table class="table mt-4 table-hover">
+				<caption>Investments by Type</caption>
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Type #</th>
+						<th scope="col">USD Value</th>
+						<th scope="col">% of Porffolio</th>
+					</tr>
+				</thead>
+<!--				POPULATED DATA WITH TYMELEAF -->
+				<tbody class="table-group-divider">
+					<tr th:each="type : ${investmentTypes}">
+						<th scope="row">
+							<a th:href="@{/investments/by_type/{type}(type=${type})}" class="btn btn-outline-dark" th:text="${type}"> </a>
+						</th>
+						
+						<td th:text="${typeTotals.get(type)}"></td>
+						<td>#### %</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+
+
+
+
 </body>
 
 </html>

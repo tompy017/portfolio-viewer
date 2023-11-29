@@ -22,7 +22,7 @@ public class ForexRateFetcherTest {
 		
 		double usdRate = forexRateFetcher.getUsdRate(currency);
 		
-		System.out.println("\n\nEURO RATE " + usdRate);
+		System.out.println("\n\n *** EURO RATE " + usdRate + " ***\n\n");
 		
 		assertEquals(true, usdRate >= 0.0);
 		

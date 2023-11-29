@@ -1,9 +1,11 @@
 package perlas.de.portfolio.controller;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.List;
 import java.util.Set;
 
+//import org.hibernate.mapping.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import perlas.de.portfolio.entities.Investment;
 import perlas.de.portfolio.service.InvestmentService;
-import perlas.de.portfolio.service.InvestmentServiceImpl;
 
 /*
  * Webapp controller
@@ -52,11 +53,13 @@ public class InvestmentViewController {
 		
 		investmentService.saveInvestment(investment);
 
-		return "redirect:/investments/"; // save the investment and goes back to the list
+		return "redirect:/investments/"; // save the investment and go back to the list (investment.html template)
 	}
 	
 	
+	
 	//					UPDATE
+	
 	@PostMapping("/{id}")
 	public String updateInvestment(@PathVariable int id, 
 			@ModelAttribute("investment") Investment investment, 
@@ -76,12 +79,12 @@ public class InvestmentViewController {
 		if (investment.getPurchasedDate() != null) {
 			investmentToUpdate.setPurchasedDate(investment.getPurchasedDate());			
 		}
-		
-		
+			
 		investmentService.updateInvestment(investmentToUpdate);  // save
 		
 		return "redirect:/investments/";                         // redirect
 	}
+	
 	
 	@GetMapping("/edit/{id}")
 	public String updateInvestmentForm(@PathVariable int id, Model model) {
@@ -171,15 +174,17 @@ public class InvestmentViewController {
 		
 		Set<String> investmentTypes = investmentService.getAllInvestmentTypes();
 		Set<String> investmentCategories = investmentService.getAllInvestmentCategories();
+		Map<String, Double> typeTotals = investmentService.getTotalsPerType();
+		Map<String, Double> categoryTotals = investmentService.getTotalsPerCategory();
+		
 		
 		model.addAttribute("investmentTypes", investmentTypes);
 		model.addAttribute("investmentCategories", investmentCategories);
+		model.addAttribute("categoryTotals", categoryTotals);
+		model.addAttribute("typeTotals", typeTotals);
 		
 		return "investment-summary";
 		
 	}
-	
-	//TODO: modificar return para que todo retorne el template "investments" al filtrar
-	//TODO: agregar todas las inversiones al model de porffolioSummary para obtener los totales
-	
+
 }
