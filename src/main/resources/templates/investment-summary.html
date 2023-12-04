@@ -15,38 +15,37 @@
 		<div class="row">
 			<h1 class="text-center" id="title" name="title">Investment Summary</h1>
 		</div>
-		<div>
-			<h2>Investment Types:</h2>
-			<ul>
-				<li th:each="type : ${investmentTypes}"th:text="${type}">.</li>
-			</ul>
+		<!--		TABLE FOR CATEGORIES -->
+		<div class="container mt-auto table-responsive">
+			<table class="table mt-4 table-hover">
+				<caption>Investments by Category</caption>
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Category</th>
+						<th scope="col">USD Value</th>
+						<th scope="col">% of Porffolio</th>
+					</tr>
+				</thead>
+<!--				POPULATED DATA WITH TYMELEAF -->
+				<tbody class="table-group-divider">
+					<tr th:each="category : ${investmentCategories}">
+						<th scope="row">
+							<a th:href="@{/investments/by_category/{category}(category=${category})}" class="btn btn-outline-dark" th:text="${category}"> </a>
+						</th>
+						
+						<td th:text="${categoryTotals.get(category)[0]}"></td>
+						<td th:text="${categoryTotals.get(category)[1]}"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-		<div>
-			<h2>Investment Categories:</h2>
-			<ul>
-				<li th:each="category : ${investmentCategories}" th:text="${category}">.</li>
-			</ul>
-		</div>
-
-
-		<div class="d-flex justify-content-center">
-			<a th:href="@{/investments/new}" class="btn btn-primary btn-block">Add investment</a>
-		</div>
-	</div>
-
-
-
-	<div class="container mx-auto py-4">
-		<div class="row">
-			<h1 class="text-center" id="title" name="title">Investments</h1>
-		</div>
-<!--		TABLE -->
+<!--		TABLE FOR TYPES -->
 		<div class="container mt-auto table-responsive">
 			<table class="table mt-4 table-hover">
 				<caption>Investments by Type</caption>
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col">Type #</th>
+						<th scope="col">Type</th>
 						<th scope="col">USD Value</th>
 						<th scope="col">% of Porffolio</th>
 					</tr>
@@ -58,11 +57,15 @@
 							<a th:href="@{/investments/by_type/{type}(type=${type})}" class="btn btn-outline-dark" th:text="${type}"> </a>
 						</th>
 						
-						<td th:text="${typeTotals.get(type)}"></td>
-						<td>#### %</td>
+						<td th:text="${typeTotals.get(type)[0]}"></td>
+						<td th:text="${typeTotals.get(type)[1]}"></td>
 					</tr>
 				</tbody>
 			</table>
+		</div>
+<!--		BACK BUTTON -->
+		<div class="d-flex justify-content-center">
+			<a th:href="@{/investments/}" class="btn btn-outline-dark btn-lg btn-block">Back</a>
 		</div>
 
 

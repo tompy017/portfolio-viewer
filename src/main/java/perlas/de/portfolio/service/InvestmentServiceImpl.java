@@ -1,5 +1,6 @@
 package perlas.de.portfolio.service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,13 +68,14 @@ public class InvestmentServiceImpl implements InvestmentService {
 			if (investment.getName() != null) {
 				investmentToUpdate.setName(investment.getName());
 			}
-			if (investment.getPrice() != 0.0) {
+			if (investment.getPrice() >= 0.0) {
 				investmentToUpdate.setPrice(investment.getPrice());
 			}
+			
 			if (investment.getPurchasedDate() != null) {
 				investmentToUpdate.setPurchasedDate(investment.getPurchasedDate());
 			}
-			if (investment.getQty() != 0.0) {
+			if (investment.getQty() >= 0.0) {
 				investmentToUpdate.setQty(investment.getQty());
 			}
 			if (investment.getToken() != null) {
@@ -85,6 +87,10 @@ public class InvestmentServiceImpl implements InvestmentService {
 
 			if (investment.getCurrency() != null) {
 				investmentToUpdate.setCurrency(investment.getCurrency());
+			}
+			
+			if (investment.getActualPrice() >= 0.0) {
+				investmentToUpdate.setActualPrice(investment.getActualPrice());
 			}
 
 			investmentRepository.save(investmentToUpdate);
@@ -164,101 +170,247 @@ public class InvestmentServiceImpl implements InvestmentService {
 		return investmentsByCurrency;
 	}
 
+	
 	@Override
+	public double getInvestmentValueInUsd(Investment investment) {
+		
+		double valueInUsd = investment.getActualPrice() * investment.getQty();
+		
+		
+		return valueInUsd;
+	}
+	
+
+	
+	@Override
+	public double getPortfolioValueInUsd() {
+		
+		double total = 0;
+		
+		for (Investment investment : this.getAllInvestments()) {
+			total += this.getInvestmentValueInUsd(investment);
+		}
+		
+		return total;
+	}
+	
+	
+	@Override
+	/**
+	 * Calculates the total value in usd for a given category.
+	 * @return total value in usd for the given category
+	 */
 	public double getTotalValueInUsdByCategory(String category) {
 
 		double totalUsdValue = 0.0;
-		List<Investment> investmentsByCategory = this.listInvestmentByCategory(category);
 
-		for (Investment investment : investmentsByCategory) {
+		for (Investment investment : this.listInvestmentByCategory(category)) {
 			totalUsdValue += this.getInvestmentValueInUsd(investment);
 		}
 	
 
-		return totalUsdValue;
+		return formatDoubleWithTwoDecimals(totalUsdValue);
 	}
-
+	
+	
 	@Override
+	/**
+	 * Calculates the total value in usd for a given type.
+	 * @return total value in usd for the given type
+	 */
 	public double getTotalValueInUsdByType(String type) {
 
 		double totalUsdValue = 0.0;
-		List<Investment> investmentsByType = this.listInvestmentByType(type);
 
-		for (Investment investment : investmentsByType) {
+		for (Investment investment : this.listInvestmentByType(type)) {
 			totalUsdValue += this.getInvestmentValueInUsd(investment);
 		}
 
-		return totalUsdValue;
+		return formatDoubleWithTwoDecimals(totalUsdValue);
 	}
 
+	
 	@Override
-	public double getInvestmentValueInUsd(Investment investment) {
-
-		double valueInUsd = investment.getPrice() * investment.getQty();
-
-		// Crypto converter for non-stable-coins
-		if (investment.getCategory().equalsIgnoreCase("crypto")) {
-			if (!investment.getType().equalsIgnoreCase("stable-coin")) {
-				double actualPrice = -1;
-				try {
-					actualPrice = cryptoPriceFetcher.getActualValueInUSD(investment.getName());
-					valueInUsd = investment.getQty() * actualPrice;
-					
-				} catch (Exception e) {
-					logger.error("Error fetching actual price for token: {}", investment.getToken(), e);
-	                
-				}
-			}
+	/**
+	 * Calculates the % of portfolio this type has (against other types)
+	 * @return the porcentaje of this type in comparison to other types
+	 */
+	public double getTotalPercentageOfType(String type) {
+		
+		double portfolioTotal = this.getPortfolioValueInUsd();
+		double typeTotal = 0;
+		
+		for (Investment investment : this.listInvestmentByType(type)) {
+			double investmentTotal = this.getInvestmentValueInUsd(investment);
+			typeTotal += investmentTotal;
 		}
-
-		// fiat converter to usd
-		if (investment.getCategory().equalsIgnoreCase("fiat") && investment.getType().equalsIgnoreCase("cash")) {
-
-			// convert ARS using the blue rate
-			if (investment.getCurrency().equalsIgnoreCase("ars")) {
-				double blueRate = blueRateFetcher.getBlueRate();
-				valueInUsd /= blueRate;
-			}
-
-			// convert any other currency (except dollars and ars) to USD
-			if (!investment.getCurrency().equalsIgnoreCase("usd")
-					&& !investment.getCurrency().equalsIgnoreCase("ars")) {
-				double exchangeRate = forexRateFetcher.getUsdRate(investment.getCurrency());
-				valueInUsd /= exchangeRate;
-			}
-		}
-
-		return valueInUsd;
+		
+		double percentage = (typeTotal / portfolioTotal) * 100;
+		
+		return formatDoubleWithTwoDecimals(percentage);
 	}
-
+	
+	
 	@Override
-	public Map<String, Double> getTotalsPerCategory() {
+	/**
+	 * Calculates the % of portfolio this category has (against other categories)
+	 * @return the porcentaje of this category in comparison to the other categories
+	 */
+	public double getTotalPercentageOfCategory(String category) {
+		
+		double portfolioTotal = this.getPortfolioValueInUsd();
+		double categoryTotal = 0;
+		
+		for (Investment investment : this.listInvestmentByCategory(category)) {
+			double investmentTotal = this.getInvestmentValueInUsd(investment);
+			
+			categoryTotal += investmentTotal;
+		}
+		
+		double percentage = (categoryTotal / portfolioTotal) * 100;
 
-		Map<String, Double> totalsPerCategory = new HashMap<>();
-		Set<String> categories = this.getAllInvestmentCategories();
+		
+		return formatDoubleWithTwoDecimals(percentage);
+	}
+	
+	
+	
+	
+	@Override
+	/**
+	 * Gathers the totalValueInUsdByCategory and totalPercentageOfCategory into a map.
+	 * @return a Map containing each category and a list cointaining the total and the percentage that category represents.
+	 * "category" : [totalValueInUsd, percentageOfCategory]
+	 */
+	public Map<String, List<Double>> getTotalsPerCategory() {
 
-		for (String category : categories) {
+		Map<String, List<Double>> totalsPerCategory = new HashMap<>();
+
+		for (String category : this.getAllInvestmentCategories()) {
+			
 			double total = this.getTotalValueInUsdByCategory(category);
+			double percentage = this.getTotalPercentageOfCategory(category);
+			
+			List<Double> values = new ArrayList<>();
+			values.add(total);
+			values.add(percentage);
 
-			totalsPerCategory.put(category, total);
+			totalsPerCategory.put(category, values);
 		}
 
 		return totalsPerCategory;
 	}
 
+	
+	
+	
 	@Override
-	public Map<String, Double> getTotalsPerType() {
+	/**
+	 * Gathers the totalValueInUsdByType and totalPercentageOfType into a map.
+	 * @return a Map containing each type and a list cointaining the total and the percentage that type represents.
+	 * "category" : [totalValueInUsd, percentageOfCategory]
+	 */
+	public Map<String, List<Double>> getTotalsPerType() {
 
-		Map<String, Double> totalsPerType = new HashMap<>();
-		Set<String> types = this.getAllInvestmentTypes();
+		Map<String, List<Double>> totalsPerType = new HashMap<>();
 
-		for (String type : types) {
+		for (String type : this.getAllInvestmentTypes()) {
+			
 			double total = this.getTotalValueInUsdByType(type);
+			double percentage = this.getTotalPercentageOfType(type);
+			
+			List<Double> values = new ArrayList<>();
+			values.add(total);
+			values.add(percentage);
 
-			totalsPerType.put(type, total);
+			totalsPerType.put(type, values);
 		}
 
 		return totalsPerType;
 	}
 
+	
+
+	
+
+	
+	@Override
+	/**
+	 * Uses the fetchers to get the actual price depending the investments type.
+	 * @return the actual value in usd for the Investment
+	 */
+	public double fetchInvestmentPriceInUsd(Investment investment) {
+
+		double valueInUsd = investment.getActualPrice();
+
+		// Crypto converter for non-stable-coins
+		if (investment.getCategory().equalsIgnoreCase("crypto") 
+				&& !investment.getType().equalsIgnoreCase("stable-coin")) {	
+				valueInUsd = fetchCryptoValueInUsd(investment);
+			}
+
+		// fiat converter to usd
+		if (investment.getCategory().equalsIgnoreCase("fiat") 
+				&& investment.getType().equalsIgnoreCase("cash")) {
+
+			// convert ARS using the blue rate
+			if (investment.getCurrency().equalsIgnoreCase("ars")) {
+				valueInUsd = fetchArsToBlueRate(investment);
+			}
+
+			// convert any other currency (except dollars and ars) to USD
+			if (!investment.getCurrency().equalsIgnoreCase("usd")
+					&& !investment.getCurrency().equalsIgnoreCase("ars")) {
+				valueInUsd = fetchForexValueInUsd(investment);
+			}
+		}
+		return valueInUsd;
+	}
+
+	
+	private double fetchCryptoValueInUsd(Investment investment) {
+		
+		try {
+			double cryptoPrice = cryptoPriceFetcher.getActualValueInUSD(investment.getName());
+			return cryptoPrice;
+			
+		} catch (Exception e) {
+			logger.error("Error fetching actual price for token: {}", investment.getToken(), e);
+            return investment.getActualPrice(); 
+		}
+	}
+	
+	private double fetchArsToBlueRate(Investment investment) {
+		
+		try {
+			double blueRate = blueRateFetcher.getBlueRate();
+			return blueRate;
+		} catch (Exception e) {
+	        logger.error("Error fetching actual price for ARS: {}", investment.getToken(), e);
+	        return investment.getActualPrice(); 
+		}
+	}
+	
+	private double fetchForexValueInUsd(Investment investment) {
+		
+		try {
+			double exchangeRate = forexRateFetcher.getUsdRate(investment.getCurrency());
+			return exchangeRate;
+		
+		} catch (Exception e) {
+	        logger.error("Error fetching actual price for ARS: {}", investment.getToken(), e);
+	        return investment.getActualPrice(); 	
+		}
+	}
+	
+	
+
+	private double formatDoubleWithTwoDecimals(double number) {
+		
+		DecimalFormat decimalFormat = new DecimalFormat("#.##");
+		
+		return Double.parseDouble(decimalFormat.format(number));
+	}
+	
+	
 }

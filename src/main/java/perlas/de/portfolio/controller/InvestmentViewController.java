@@ -47,6 +47,9 @@ public class InvestmentViewController {
 	@PostMapping("/")
 	public String saveInvestment(@ModelAttribute("investment") Investment investment) {
 		
+		// Set actualPrice to purchasedPrice before saving
+	    investment.setActualPrice(investment.getPrice());
+	    
 		if (investment.getPurchasedDate() == null) {
 			investment.setPurchasedDate(LocalDate.now());
 		}
@@ -68,7 +71,8 @@ public class InvestmentViewController {
 		Investment investmentToUpdate = investmentService.getInvestmentById(id);
 		
 		investmentToUpdate.setName(investment.getName());
-		investmentToUpdate.setPrice(investment.getPrice());		
+		investmentToUpdate.setPrice(investment.getPrice());
+		investmentToUpdate.setActualPrice(investment.getActualPrice());
 		investmentToUpdate.setQty(investment.getQty());
 		investmentToUpdate.setToken(investment.getToken());
 		investmentToUpdate.setCategory(investment.getCategory());
@@ -107,7 +111,9 @@ public class InvestmentViewController {
 	
 	@GetMapping("/")
 	public String listAllInvestments(Model model) {
+		
 		model.addAttribute("investments", investmentService.getAllInvestments());
+		
 		return "investments"; // returns investments.html
 	}
 	
@@ -174,14 +180,14 @@ public class InvestmentViewController {
 		
 		Set<String> investmentTypes = investmentService.getAllInvestmentTypes();
 		Set<String> investmentCategories = investmentService.getAllInvestmentCategories();
-		Map<String, Double> typeTotals = investmentService.getTotalsPerType();
-		Map<String, Double> categoryTotals = investmentService.getTotalsPerCategory();
+		Map<String, List<Double>> typeTotals = investmentService.getTotalsPerType();
+		Map<String, List<Double>> categoryTotals = investmentService.getTotalsPerCategory();
 		
 		
 		model.addAttribute("investmentTypes", investmentTypes);
 		model.addAttribute("investmentCategories", investmentCategories);
-		model.addAttribute("categoryTotals", categoryTotals);
 		model.addAttribute("typeTotals", typeTotals);
+		model.addAttribute("categoryTotals", categoryTotals);
 		
 		return "investment-summary";
 		

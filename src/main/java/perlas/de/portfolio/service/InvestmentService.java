@@ -30,14 +30,23 @@ public interface InvestmentService {
 	
 	public Set<String> getAllInvestmentCategories();
 	
+	public double getInvestmentValueInUsd(Investment investment);
+
+	public double fetchInvestmentPriceInUsd(Investment investment);
+	
+	public double getPortfolioValueInUsd();
+
 	public double getTotalValueInUsdByType(String type);
 	
 	public double getTotalValueInUsdByCategory(String category);
 	
-	public double getInvestmentValueInUsd(Investment investment);
+	public double getTotalPercentageOfType(String type);
 	
-	public Map<String, Double> getTotalsPerCategory();
+	public double getTotalPercentageOfCategory(String category);
 	
-	public Map<String, Double> getTotalsPerType();
+	public Map<String, List<Double>> getTotalsPerCategory();
+	
+	public Map<String, List<Double>> getTotalsPerType();
+
 
 }

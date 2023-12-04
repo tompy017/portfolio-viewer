@@ -9,14 +9,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/*
+
+@Component
+/**
  * In charge of retrieving the average blue rate from bluelytics api.
  * Makes the request to the api's url, serialize the json and returns
  * the latest value for the argentinian "dollar blue" or returns -1 if catchs an exception
  */
-
-
-@Component
 public class BlueRateFetcher {
 	
 	private final static String API_URL = "https://api.bluelytics.com.ar/v2/latest";

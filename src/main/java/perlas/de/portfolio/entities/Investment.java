@@ -7,13 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 //@Data  // will auto generate constructor, hashCode, toString, getters & setters ~ @Getter @Setter @RequiredArgsConstructor @ToString @EqualsAndHashCode
@@ -50,6 +44,17 @@ public class Investment {
 	
 	@Column(columnDefinition = "varchar(10) default 'usd'")
 	private String currency;
+	
+	@Column(name = "actual_price")
+	private double actualPrice;
+
+	public double getActualPrice() {
+		return actualPrice;
+	}
+
+	public void setActualPrice(double actualPrice) {
+		this.actualPrice = actualPrice;
+	}
 
 	public String getCurrency() {
 		return currency;
@@ -128,7 +133,7 @@ public class Investment {
 	@Override
 	public String toString() {
 		return "Investment [id=" + id + ", token=" + token + ", name=" + name + ", qty=" + qty + ", price=" + price
-				+ ", purchasedDate=" + purchasedDate + ", category=" + category + ", type=" + type + "]";
+				+ ", purchasedDate=" + purchasedDate + ", actualPrice=" +actualPrice + ", category=" + category + ", type=" + type + "]";
 	}
 
 	
@@ -146,6 +151,7 @@ public class Investment {
 		this.category = category;
 		this.type = type;
 		this.currency = currency;
+		this.actualPrice = price;
 	}
 	
 	
@@ -161,6 +167,7 @@ public class Investment {
 		this.category = category;
 		this.type = type;
 		this.currency = currency;
+		this.actualPrice = price;
 	}
 	
 

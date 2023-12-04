@@ -32,9 +32,15 @@
 							<input type="number" step="0.01" name="inputQty" id="inputQty" th:field="*{qty}"
 								class="form-control" placeholder="Qty"></input>
 						</div>
+<!--						ACTUAL PRICE -->
+						<div class="form-group">
+							<label for="inputActualPrice">Actual Price</label>
+							<input type="number" step="0.01" name="inputActualPrice" id="inputActualPrice" th:field="*{actualPrice}"
+								class="form-control" placeholder="Actual Price"></input>
+						</div>
 <!--						PRICE-->
 						<div class="form-group">
-							<label for="inputPrice">Price</label>
+							<label for="inputPrice">Bought at</label>
 							<input type="number" step="0.01" name="inputPrice" id="inputPrice" th:field="*{price}"
 								class="form-control" placeholder="Purchased price"></input>
 						</div>
@@ -68,14 +74,14 @@
 <!--						SAVE BUTTON-->
 						<div class="box-footer pt-4">
 							<div class="row">
-								<button class="btn btn-primary">Save</button>
+								<button class="btn btn-outline-primary">Save</button>
 							</div>
 						</div>
 					</form>
 				</div>
 <!--				CANCEL BUTTON-->
 				<div class="col-lg-3">
-					<a th:href="@{/investments/}" class="btn btn-secondary btn-sm mb-3 ">Cancel</a>
+					<a th:href="@{/investments/}" class="btn btn-outline-dark btn-sm mb-3 ">Cancel</a>
 				</div>
 			</div>
 		</div>
