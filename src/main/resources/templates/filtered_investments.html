@@ -20,35 +20,50 @@
 <!--		TABLE -->
 		<div class="container mt-auto table-responsive">
 			<table class="table mt-4 table-hover">
+				<caption>Filtered investments</caption>
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col">id #</th>
+						<th scope="col">id</th>
 						<th scope="col">Token</th>
 						<th scope="col">Name</th>
 						<th scope="col">Qty</th>
-						<th scope="col">Purchased Price</th>
-						<th scope="col">Purchased Date</th>
+						<th scope="col">Last Price</th>
+						<th scope="col">USD Total</th>
+						<th scope="col">Currency</th>
+						<th scope="col">Bought at</th>
 						<th scope="col">Category</th>
 						<th scope="col">Type</th>
-						<th scope="col">Currency</th>
+						<th scope="col">Date</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
+						<th scope="col">Update Price</th>
 					</tr>
 				</thead>
-<!--				POPULATED DATA WITH THYMELEAF -->
+<!--				POPULATED DATA WITH TYMELEAF -->
 				<tbody class="table-group-divider">
 					<tr th:each="investment : ${investments}">
 						<th scope="row" th:text="${investment.id}"></th>
-						<td th:text="${investment.token}"></td>
+						<td>
+							<a th:href="@{/investments/by_token/{token}(token=${investment.token})}" class="btn btn-outline-dark" th:text="${investment.token}"></a>
+						</td>
+
 						<td th:text="${investment.name}"></td>
 						<td th:text="${investment.qty}"></td>
-						<td th:text="${investment.price}"></td>
-						<td th:text="${investment.purchasedDate}"></td>
-						<td th:text="${investment.category}"></td>
-						<td th:text="${investment.type}"></td>
-						<td th:text="${investment.currency}"></td>
+						<td th:text="${#strings.replace(#numbers.formatCurrency(investment.actualPrice), '.00', '')}"></td>
+						<td th:text="${#numbers.formatCurrency(investment.actualPrice * investment.qty)}"></td>
 						<td>
+							<a th:href="@{/investments/by_currency/{currency}(currency=${investment.currency})}" class="btn btn-outline-dark" th:text="${investment.currency}"></a>
+						</td>
+						<td th:text="${investment.price}"></td>
+						<td>
+                        	<a th:href="@{/investments/by_category/{category}(category=${investment.category})}" class="btn btn-outline-dark" th:text="${investment.category}"></a>
+	                    </td>
+	                    <td>
+                        	<a th:href="@{/investments/by_type/{type}(type=${investment.type})}" class="btn btn-sm btn-outline-dark" th:text="${investment.type}"></a>
+                    	</td>
+						<td th:text="${investment.purchasedDate}"></td>
 <!--					EDIT AND DELETE BUTTONS -->
+						<td>
 							<a th:href="@{/investments/edit/{id}(id=${investment.id})}" class="btn btn-light btn-sm">
 								<i class="material-icons">edit</i>
 							</a>
@@ -58,16 +73,28 @@
 								<i class="material-icons">delete</i>
 							</a>
 						</td>
+						<td>
+							<a th:href="@{/investments/update-price/{id}(id=${investment.id})}" class="btn btn-outline-success btn-sm">
+								<i class="material-icons">currency_exchange</i>
+							</a>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		
+	</div>
 <!--		BOTTOM BUTTONS -->
-		<div class="d-flex justify-content-center">
-			<a th:href="@{/investments/new}" class="btn btn-outline-primary"style="margin-right: 10px">Add investment</a>
-		    <a th:href="@{/investments/}" class="btn btn-outline-dark">Go Back</a>
+
+	<div class="cotainer mx-auto">
+		<div class="d-flex justify-content-center mx-auto py-4">
+			<a th:href="@{/investments/summary}" class="btn btn-outline-success btn-block">Go to Investments Summary</a>
 		</div>
+	</div>
+
+	<div class="d-flex justify-content-center">
+		<a th:href="@{/investments/new}" class="btn btn-outline-primary"style="margin-right: 10px">Add investment</a>
+	    <a th:href="@{/investments/}" class="btn btn-outline-dark">Back to all investments</a>
+	</div>
 	</div>
 
 </body>

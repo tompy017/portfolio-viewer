@@ -2,12 +2,10 @@ package perlas.de.portfolio.controller;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-//import org.hibernate.mapping.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -108,6 +106,20 @@ public class InvestmentViewController {
 	
 	
 	//					READ
+	
+	
+	@GetMapping("by_id/{id}")
+	public String getInvestmentById(@PathVariable int id, Model model) {
+		String title = "#" + id + " Investments";
+		model.addAttribute(title, "title");
+		
+		
+		model.addAttribute("investments", investmentService.getInvestmentById(id));
+		model.addAttribute("id", id);
+		
+		return "filtered_investments";
+	}
+	
 	
 	@GetMapping("/")
 	public String listAllInvestments(Model model) {
