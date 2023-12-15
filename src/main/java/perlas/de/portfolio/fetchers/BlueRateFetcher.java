@@ -48,7 +48,7 @@ public class BlueRateFetcher {
 			e.printStackTrace();
 		}
 		
-		return 1/blueRate;
+		return 1 / blueRate;
 		
 	}
 

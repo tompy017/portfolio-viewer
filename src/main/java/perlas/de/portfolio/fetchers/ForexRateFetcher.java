@@ -46,7 +46,7 @@ public class ForexRateFetcher {
 			e.printStackTrace();
 		}
 		
-		return usdRate;
+		return 1 / usdRate;
 		
 		
 		

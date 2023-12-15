@@ -92,6 +92,10 @@ public class InvestmentServiceImpl implements InvestmentService {
 			if (investment.getActualPrice() >= 0.0) {
 				investmentToUpdate.setActualPrice(investment.getActualPrice());
 			}
+			
+			if (investment.getActualPriceInUSD() >= 0.0) {
+				investmentToUpdate.setActualPriceInUSD(investment.getActualPriceInUSD());
+			}
 
 			investmentRepository.save(investmentToUpdate);
 
@@ -135,6 +139,15 @@ public class InvestmentServiceImpl implements InvestmentService {
 
 		return investmentByToken;
 	}
+	
+	@Override
+	public List<Investment> listInvestentByCurrency(String currency) {
+		
+		List<Investment> investmentsByCurrency = investmentRepository.findAll().stream()
+				.filter(investment -> investment.getCurrency().equalsIgnoreCase(currency)).collect(Collectors.toList());
+		
+		return investmentsByCurrency;
+	}
 
 	@Override
 	public Set<String> getAllInvestmentTypes() {
@@ -161,22 +174,23 @@ public class InvestmentServiceImpl implements InvestmentService {
 		return categories;
 	}
 
-	@Override
-	public List<Investment> listInvestentByCurrency(String currency) {
-
-		List<Investment> investmentsByCurrency = investmentRepository.findAll().stream()
-				.filter(investment -> investment.getCurrency().equalsIgnoreCase(currency)).collect(Collectors.toList());
-
-		return investmentsByCurrency;
-	}
-
 	
 	@Override
 	public double getInvestmentValueInUsd(Investment investment) {
 		
-		double valueInUsd = investment.getActualPrice() * investment.getQty();
+		double valueInUsd = investment.getActualPriceInUSD() * investment.getQty();
 		
 		
+		
+		
+		if (investment.getCurrency().equalsIgnoreCase("ars") 
+				&& !investment.getType().equalsIgnoreCase("cash")) {
+			
+			valueInUsd = (investment.getActualPrice() / investment.getActualPriceInUSD()) * investment.getQty();
+		}
+		
+		
+
 		return valueInUsd;
 	}
 	
@@ -195,11 +209,11 @@ public class InvestmentServiceImpl implements InvestmentService {
 	}
 	
 	
-	@Override
 	/**
-	 * Calculates the total value in usd for a given category.
+	 * Calculate the total value in usd for a given category.
 	 * @return total value in usd for the given category
 	 */
+	@Override
 	public double getTotalValueInUsdByCategory(String category) {
 
 		double totalUsdValue = 0.0;
@@ -213,11 +227,11 @@ public class InvestmentServiceImpl implements InvestmentService {
 	}
 	
 	
-	@Override
 	/**
 	 * Calculates the total value in usd for a given type.
 	 * @return total value in usd for the given type
 	 */
+	@Override
 	public double getTotalValueInUsdByType(String type) {
 
 		double totalUsdValue = 0.0;
@@ -230,11 +244,11 @@ public class InvestmentServiceImpl implements InvestmentService {
 	}
 
 	
-	@Override
 	/**
 	 * Calculates the % of portfolio this type has (against other types)
 	 * @return the porcentaje of this type in comparison to other types
 	 */
+	@Override
 	public double getTotalPercentageOfType(String type) {
 		
 		double portfolioTotal = this.getPortfolioValueInUsd();
@@ -251,11 +265,11 @@ public class InvestmentServiceImpl implements InvestmentService {
 	}
 	
 	
-	@Override
 	/**
 	 * Calculates the % of portfolio this category has (against other categories)
 	 * @return the porcentaje of this category in comparison to the other categories
 	 */
+	@Override
 	public double getTotalPercentageOfCategory(String category) {
 		
 		double portfolioTotal = this.getPortfolioValueInUsd();
@@ -276,12 +290,12 @@ public class InvestmentServiceImpl implements InvestmentService {
 	
 	
 	
-	@Override
 	/**
 	 * Gathers the totalValueInUsdByCategory and totalPercentageOfCategory into a map.
 	 * @return a Map containing each category and a list cointaining the total and the percentage that category represents.
 	 * "category" : [totalValueInUsd, percentageOfCategory]
 	 */
+	@Override
 	public Map<String, List<Double>> getTotalsPerCategory() {
 
 		Map<String, List<Double>> totalsPerCategory = new HashMap<>();
@@ -304,12 +318,12 @@ public class InvestmentServiceImpl implements InvestmentService {
 	
 	
 	
-	@Override
 	/**
 	 * Gathers the totalValueInUsdByType and totalPercentageOfType into a map.
 	 * @return a Map containing each type and a list cointaining the total and the percentage that type represents.
 	 * "category" : [totalValueInUsd, percentageOfCategory]
 	 */
+	@Override
 	public Map<String, List<Double>> getTotalsPerType() {
 
 		Map<String, List<Double>> totalsPerType = new HashMap<>();
@@ -334,39 +348,36 @@ public class InvestmentServiceImpl implements InvestmentService {
 	
 
 	
-	@Override
 	/**
 	 * Uses the fetchers to get the actual price depending the investments type.
 	 * @return the actual value in usd for the Investment
 	 */
+	@Override
 	public double fetchInvestmentPriceInUsd(Investment investment) {
 
-		double valueInUsd = investment.getActualPrice();
 
-		// Crypto converter for non-stable-coins
 		if (investment.getCategory().equalsIgnoreCase("crypto") 
-				&& !investment.getType().equalsIgnoreCase("stable-coin")) {	
-				valueInUsd = fetchCryptoValueInUsd(investment);
-			}
-
-		// fiat converter to usd
-		if (investment.getCategory().equalsIgnoreCase("fiat") 
-				&& investment.getType().equalsIgnoreCase("cash")) {
-
-			// convert ARS using the blue rate
-			if (investment.getCurrency().equalsIgnoreCase("ars")) {
-				valueInUsd = fetchArsToBlueRate(investment);
-			}
-
-			// convert any other currency (except dollars and ars) to USD
-			if (!investment.getCurrency().equalsIgnoreCase("usd")
-					&& !investment.getCurrency().equalsIgnoreCase("ars")) {
-				valueInUsd = fetchForexValueInUsd(investment);
-			}
+				&& !investment.getType().equalsIgnoreCase("stable-coin")) {
+			
+			return fetchCryptoValueInUsd(investment);
+			
+		} else if (investment.getCurrency().equalsIgnoreCase("usd")) {
+			
+			return 1.0;
+			
+			
+		} else if (investment.getCurrency().equalsIgnoreCase("ars")) {
+			
+			return fetchArsToBlueRate(investment);
+		
+		} else {
+			
+			return fetchForexValueInUsd(investment);
 		}
-		return valueInUsd;
+		
 	}
 
+	
 	
 	private double fetchCryptoValueInUsd(Investment investment) {
 		
@@ -385,6 +396,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 		try {
 			double blueRate = blueRateFetcher.getBlueRate();
 			return blueRate;
+			
 		} catch (Exception e) {
 	        logger.error("Error fetching actual price for ARS: {}", investment.getToken(), e);
 	        return investment.getActualPrice(); 

@@ -47,6 +47,18 @@ public class Investment {
 	
 	@Column(name = "actual_price")
 	private double actualPrice;
+	
+	//actual value in usd to make calculations
+	@Column(name = "usd_actual_price")
+	private double actualPriceInUSD;
+
+	public double getActualPriceInUSD() {
+		return actualPriceInUSD;
+	}
+
+	public void setActualPriceInUSD(double actualPriceInUSD) {
+		this.actualPriceInUSD = actualPriceInUSD;
+	}
 
 	public double getActualPrice() {
 		return actualPrice;

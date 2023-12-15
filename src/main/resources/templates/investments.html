@@ -27,6 +27,7 @@
 						<th scope="col">Name</th>
 						<th scope="col">Qty</th>
 						<th scope="col">Last Price</th>
+						<th scope="col">USD price</th>
 						<th scope="col">USD Total</th>
 						<th scope="col">Currency</th>
 						<th scope="col">Category</th>
@@ -40,38 +41,52 @@
 <!--				POPULATED DATA WITH TYMELEAF -->
 				<tbody class="table-group-divider">
 					<tr th:each="investment : ${investments}">
+<!--						ID-->
 						<th scope="row">
-							<a th:href="@{/investments/by_id/{id}(id=${investment.id})}" class="btn btn-outline-dark" th:text="${investment.id}"></a>
+							<a th:href="@{/investments/by_id/{id}(id=${investment.id})}" class="btn btn-outline-dark" th:text="${investment.id}"></a>  ID
 						</th>
+<!--						TOKEN-->
 						<td>
 							<a th:href="@{/investments/by_token/{token}(token=${investment.token})}" class="btn btn-outline-dark" th:text="${investment.token}"></a>
 						</td>
-
+<!--						NAME-->
 						<td th:text="${investment.name}"></td>
+<!--						QTY-->
 						<td th:text="${investment.qty}"></td>
+<!--						LAST PRICE-->
 						<td th:text="${#strings.replace(#numbers.formatCurrency(investment.actualPrice), '.00', '')}"></td>
-						<td th:text="${#numbers.formatCurrency(investment.actualPrice * investment.qty)}"></td>
+<!--						ACTUAL PRICE IN USD-->
+						<td th:text="${#strings.replace(#numbers.formatCurrency(investment.actualPrice), '.00', '')}"></td>
+<!--						USD TOTAL VALUE-->
+						<td th:text="${#numbers.formatCurrency(investment.actualPriceInUSD)}"></td>
+<!--						CURRENCY-->
 						<td>
 							<a th:href="@{/investments/by_currency/{currency}(currency=${investment.currency})}" class="btn btn-outline-dark" th:text="${investment.currency}"></a>
 						</td>
+<!--						CATEGORY-->
 						<td>
                         	<a th:href="@{/investments/by_category/{category}(category=${investment.category})}" class="btn btn-outline-dark" th:text="${investment.category}"></a>
 	                    </td>
+<!--	                    TYPE-->
 	                    <td>
                         	<a th:href="@{/investments/by_type/{type}(type=${investment.type})}" class="btn btn-sm btn-outline-dark" th:text="${investment.type}"></a>
                     	</td>
+<!--                    	PURCHASE DATE-->
 						<td th:text="${investment.purchasedDate}"></td>
-<!--					EDIT AND DELETE BUTTONS -->
+<!--					TABLE BUTTONS -->
+<!--							EDIT -->
 						<td>
 							<a th:href="@{/investments/edit/{id}(id=${investment.id})}" class="btn btn-light btn-sm">
 								<i class="material-icons">edit</i>
 							</a>
 						</td>
+<!--							DELETE -->
 						<td>
 							<a th:href="@{/investments/del/{id}(id=${investment.id})}" class="btn btn-danger btn-sm">
 								<i class="material-icons">delete</i>
 							</a>
 						</td>
+<!--						    UPDATE PRICE -->
 						<td>
 							<a th:href="@{/investments/update-price/{id}(id=${investment.id})}" class="btn btn-outline-success btn-sm">
 								<i class="material-icons">currency_exchange</i>
