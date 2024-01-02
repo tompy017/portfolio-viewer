@@ -38,11 +38,17 @@
 							<input type="number" step="0.01" name="inputActualPrice" id="inputActualPrice" th:field="*{actualPrice}"
 								class="form-control" placeholder="Actual Price"></input>
 						</div>
-<!--						PRICE-->
+<!--						PRICE -->
 						<div class="form-group">
 							<label for="inputPrice">Bought at</label>
 							<input type="number" step="0.01" name="inputPrice" id="inputPrice" th:field="*{price}"
 								class="form-control" placeholder="Purchased price"></input>
+						</div>
+<!--						ACTUAL VALUE IN USD -->
+						<div class="form-group">
+							<label for="inputActualValueInUSD">Actual USD value</label>
+							<input type="number" step="0.1" name="inputActualValueInUSD" id="inputActualValueInUSD" th:field="*{actualValueInUSD}"
+								class="form-control" placeholder="Actual USD Value"></input>
 						</div>
 <!--						DATE-->
 						<div class="form-group">

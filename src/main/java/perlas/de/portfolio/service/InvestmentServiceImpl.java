@@ -93,8 +93,8 @@ public class InvestmentServiceImpl implements InvestmentService {
 				investmentToUpdate.setActualPrice(investment.getActualPrice());
 			}
 			
-			if (investment.getActualPriceInUSD() >= 0.0) {
-				investmentToUpdate.setActualPriceInUSD(investment.getActualPriceInUSD());
+			if (investment.getActualValueInUSD() >= 0.0) {
+				investmentToUpdate.setActualValueInUSD(investment.getActualValueInUSD());
 			}
 
 			investmentRepository.save(investmentToUpdate);
@@ -178,18 +178,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 	@Override
 	public double getInvestmentValueInUsd(Investment investment) {
 		
-		double valueInUsd = investment.getActualPriceInUSD() * investment.getQty();
-		
-		
-		
-		
-		if (investment.getCurrency().equalsIgnoreCase("ars") 
-				&& !investment.getType().equalsIgnoreCase("cash")) {
-			
-			valueInUsd = (investment.getActualPrice() / investment.getActualPriceInUSD()) * investment.getQty();
-		}
-		
-		
+		double valueInUsd = investment.getActualValueInUSD();
 
 		return valueInUsd;
 	}

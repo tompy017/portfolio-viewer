@@ -46,7 +46,7 @@ public class InvestmentViewController {
 		
 		// Set actualPrice to purchasedPrice before saving
 	    investment.setActualPrice(investment.getPrice());
-	    investment.setActualPriceInUSD(1.0);             // DEFAULT
+	    investment.setActualValueInUSD(1.0);             // DEFAULT
 	    
 		if (investment.getPurchasedDate() == null) {
 			investment.setPurchasedDate(LocalDate.now());
@@ -71,7 +71,7 @@ public class InvestmentViewController {
 		investmentToUpdate.setName(investment.getName());
 		investmentToUpdate.setPrice(investment.getPrice());
 		investmentToUpdate.setActualPrice(investment.getActualPrice());
-		investmentToUpdate.setActualPriceInUSD(investment.getActualPriceInUSD());
+		investmentToUpdate.setActualValueInUSD(investment.getActualValueInUSD());
 		investmentToUpdate.setQty(investment.getQty());
 		investmentToUpdate.setToken(investment.getToken());
 		investmentToUpdate.setCategory(investment.getCategory());

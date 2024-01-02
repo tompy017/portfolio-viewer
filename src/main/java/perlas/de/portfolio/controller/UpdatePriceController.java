@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import perlas.de.portfolio.entities.Investment;
 import perlas.de.portfolio.service.InvestmentService;
 
+
 /**
  * Dedicated to handling price updates for a given 
  * Investments based on its type and currency.
  */
-
-
 @Controller
 @RequestMapping("investments/update-price")
 public class UpdatePriceController {
@@ -29,30 +28,34 @@ public class UpdatePriceController {
 
 		if (newFetchedPrice > 0) {
 			
-			if (investment.getCategory().equalsIgnoreCase("crypto") 
-					&& !investment.getType().equalsIgnoreCase("stable-coin")) {
-				
+//			CRYPTO NON STABLE
+			if (isCryptoNonStableCoin(investment)) {
 				investment.setActualPrice(newFetchedPrice);
-				investment.setActualPriceInUSD(investment.getQty() * newFetchedPrice);
-								
-			} else if (investment.getCurrency().equalsIgnoreCase("usd")) {
-				
-				investment.setActualPriceInUSD(investment.getQty() * 1.0);				
-				
-			} else if (investment.getCurrency().equalsIgnoreCase("ars")) {
-				
-				investment.setActualPriceInUSD((investment.getActualPrice() * newFetchedPrice) * investment.getQty());
-				
-				if (investment.getType().equalsIgnoreCase("cash")) {
-					investment.setActualPrice(newFetchedPrice);
-				}
+				investment.setActualValueInUSD(investment.getQty() * newFetchedPrice);
 			
+//			USD CURRENCY AND STABLE	
+			} else if (isUsdCurrency(investment)) {
+				investment.setActualValueInUSD(investment.getQty());				
+				
+//			ARS CURRENCY	
+			} else if (isArsCurrency(investment)) {
+//				CASH
+				if (isCashType(investment)) {
+					investment.setActualPrice(newFetchedPrice);
+					investment.setActualValueInUSD(investment.getQty() * investment.getActualPrice());
+//				NO CASH
+				} else {
+					investment.setActualValueInUSD(investment.getActualPrice() * investment.getQty() * newFetchedPrice);
+				}
+
+//			OTHER CURRENCY
 			} else {
-				if (investment.getType().equalsIgnoreCase("cash")) {
+//				CASH
+				if (isCashType(investment)) {
 					investment.setActualPrice(newFetchedPrice);
 				}
 				
-				investment.setActualPriceInUSD((investment.getQty() * investment.getActualPrice()) * newFetchedPrice);
+				investment.setActualValueInUSD((investment.getQty() * investment.getActualPrice()) * newFetchedPrice);
 			}
 		}
 		
@@ -60,4 +63,25 @@ public class UpdatePriceController {
 			
 		return "redirect:/investments/";
 	}
+	
+	
+	
+	private boolean isCryptoNonStableCoin(Investment investment) {
+		
+		return investment.getCategory().equalsIgnoreCase("crypto")
+				&& !investment.getType().equalsIgnoreCase("stable-coin");
+	}
+	
+	private boolean isUsdCurrency(Investment investment) {
+		return investment.getCurrency().equalsIgnoreCase("usd");
+	}
+	
+	private boolean isArsCurrency(Investment investment) {
+		return investment.getCurrency().equalsIgnoreCase("ars");
+	}
+	
+	private boolean isCashType(Investment investment) {
+		return investment.getType().equalsIgnoreCase("cash");
+	}
+	
 }

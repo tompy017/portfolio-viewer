@@ -26,9 +26,9 @@
 						<th scope="col">Token</th>
 						<th scope="col">Name</th>
 						<th scope="col">Qty</th>
-						<th scope="col">Last Price</th>
-						<th scope="col">USD price</th>
-						<th scope="col">USD Total</th>
+						<th scope="col">Bought</th>
+						<th scope="col">Actual</th>
+						<th scope="col">Total(usd)</th>
 						<th scope="col">Currency</th>
 						<th scope="col">Category</th>
 						<th scope="col">Type</th>
@@ -43,7 +43,7 @@
 					<tr th:each="investment : ${investments}">
 <!--						ID-->
 						<th scope="row">
-							<a th:href="@{/investments/by_id/{id}(id=${investment.id})}" class="btn btn-outline-dark" th:text="${investment.id}"></a>  ID
+							<a th:href="@{/investments/by_id/{id}(id=${investment.id})}" class="btn btn-outline-dark" th:text="${investment.id}"></a>
 						</th>
 <!--						TOKEN-->
 						<td>
@@ -53,12 +53,12 @@
 						<td th:text="${investment.name}"></td>
 <!--						QTY-->
 						<td th:text="${investment.qty}"></td>
-<!--						LAST PRICE-->
-						<td th:text="${#strings.replace(#numbers.formatCurrency(investment.actualPrice), '.00', '')}"></td>
+<!--						BOUGHT PRICE-->
+						<td th:text="${#strings.replace(#numbers.formatCurrency(investment.price), '.00', '')}"></td>
 <!--						ACTUAL PRICE IN USD-->
 						<td th:text="${#strings.replace(#numbers.formatCurrency(investment.actualPrice), '.00', '')}"></td>
 <!--						USD TOTAL VALUE-->
-						<td th:text="${#numbers.formatCurrency(investment.actualPriceInUSD)}"></td>
+						<td th:text="${#numbers.formatCurrency(investment.actualValueInUSD)}"></td>
 <!--						CURRENCY-->
 						<td>
 							<a th:href="@{/investments/by_currency/{currency}(currency=${investment.currency})}" class="btn btn-outline-dark" th:text="${investment.currency}"></a>

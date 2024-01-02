@@ -16,32 +16,37 @@
 				<h1 class="text-center" id="title" name="title">New Investments</h1>
 				<div class="card-body">
 					<form th:action="@{/investments/}" th:object="${investment}" method="POST">
+<!--						TOKEN -->
 						<div class="form-group">
 							<label for="inputToken">Token</label>
 							<input type="text" name="inputToken" id="inputToken" th:field="*{token}"
 								class="form-control" placeholder="Tkn"></input>
 						</div>
-
+<!--						NAME -->
 						<div class="form-group">
 							<label for="inputName">Name</label>
 							<input type="text" name="inputName" id="inputName" th:field="*{name}" class="form-control"
 								placeholder="Name"></input>
 						</div>
+<!--						QTY -->
 						<div class="form-group">
 							<label for="inputQty">Qty</label>
 							<input type="number" step="0.01" name="inputQty" id="inputQty" th:field="*{qty}"
 								class="form-control" placeholder="Qty"></input>
 						</div>
+<!--						PRICE -->
 						<div class="form-group">
 							<label for="inputPrice">Price</label>
 							<input type="number" step="0.01" name="inputPrice" id="inputPrice" th:field="*{price}"
 								class="form-control" placeholder="Purchased price"></input>
 						</div>
+<!--						PURCHASED DATE -->
 						<div class="form-group">
 							<label for="inputPurchasedDate">Purchased date</label>
 							<input type="date" name="inputPurchasedDate" id="inputPurchasedDate"
 								th:field="*{purchasedDate}" class="form-control" placeholder="Purchased Date"></input>
 						</div>
+<!--						CATEGORY -->
 						<div class="form-group py-2">
 							<label for="selectCategory">Category</label>
 							<select name="selectCategory" id="selectCategory" th:field="*{category}">
@@ -49,19 +54,31 @@
 								<option value="crypto">CRYPTO</option>
 							</select>
 						</div>
+<!--						TYPE -->
 						<div class="form-group">
 							<label for="inputType">Type</label>
 							<input type="text" name="inputType" id="inputType" th:field="*{type}" class="form-control"
 								placeholder="cash/stable/non-stable"></input>
 						</div>
-						
+<!--						CURRENCY -->
 						<div class="form-group">
 							<label for="inputCurrency">Currency</label>
 							<input type="text" name="inputCurrency" id="inputCurrency" th:field="*{currency}" class="form-control"
 								placeholder="ars/usd/gbp/euro"></input>
 						</div>
-						
-						
+<!--					ACTUAL PRICE -->
+<!--						<div class="form-group">-->
+<!--							<label for="inputActualPrice">Actual Price</label>-->
+<!--							<input type="number" step="0.01" name="inputActualPrice" id="inputActualPrice" th:field="*{actualPrice}"-->
+<!--								class="form-control" placeholder="Actual Price"></input>-->
+<!--						</div>-->
+<!--						ACTUAL VALUE IN USD -->
+<!--						<div class="form-group">-->
+<!--							<label for="inputActualValueInUSD">Actual USD value</label>-->
+<!--							<input type="number" step="0.1" name="inputActualValueInUSD" id="inputActualValueInUSD" th:field="*{actualValueInUSD}"-->
+<!--								class="form-control" placeholder="Actual USD Value"></input>-->
+<!--						</div>-->
+<!--						BUTTONS -->
 						<div class="row box-footer pt-4">
 							<button class="btn btn-outline-primary">Save</button>
 							<a th:href="@{/investments/}" class="btn btn-outline-dark mt-2 ">Cancel</a>
