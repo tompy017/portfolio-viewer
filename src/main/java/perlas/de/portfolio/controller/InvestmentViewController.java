@@ -195,12 +195,13 @@ public class InvestmentViewController {
 		Set<String> investmentCategories = investmentService.getAllInvestmentCategories();
 		Map<String, List<Double>> typeTotals = investmentService.getTotalsPerType();
 		Map<String, List<Double>> categoryTotals = investmentService.getTotalsPerCategory();
-		
+		double totalPortfolioValue = investmentService.getPortfolioValueInUsd();
 		
 		model.addAttribute("investmentTypes", investmentTypes);
 		model.addAttribute("investmentCategories", investmentCategories);
 		model.addAttribute("typeTotals", typeTotals);
 		model.addAttribute("categoryTotals", categoryTotals);
+		model.addAttribute("totalPortfolioValue", totalPortfolioValue);
 		
 		return "investment-summary";
 		
