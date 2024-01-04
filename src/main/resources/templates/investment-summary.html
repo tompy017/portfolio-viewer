@@ -9,37 +9,29 @@
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
-
 <body>
-	
 	<div class="container mx-auto py-4">
-        <div class="row">
-            <h1 class="text-center" id="title" name="title">Investment Summary</h1>
-            <div class="container text-center mt-4">
-                <table class="table table-hover">
-                    <caption>* in USD</caption>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Total Portolio *:</th>
-                            <td th:text="${{ #numbers.formatCurrency(totalPortfolioValue) }}"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="container mt-auto table-responsive">
-                </div>
-        </div>
-    </div>
-	
-	
-	
-	
-	
-	<div class="container mx-auto py-4">
+<!--		TITLE-->
 		<div class="row">
 			<h1 class="text-center" id="title" name="title">Investment Summary</h1>
+<!--			TOTAL-->
+			<div class="container text-center mt-4">
+				<table class="table table-sm table-bordered">
+					<tbody>
+						<tr>
+							<th scope="row">Total Portolio :</th>
+							<td th:text="${{ #numbers.formatCurrency(totalPortfolioValue) }}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="container mt-auto table-responsive">
+			</div>
 		</div>
+	</div>
+	<div class="container mx-auto py-4">
+
 		<!--		TABLE FOR CATEGORIES -->
 		<div class="container mt-auto table-responsive">
 			<table class="table mt-4 table-hover">
@@ -51,20 +43,23 @@
 						<th scope="col">% of Porffolio</th>
 					</tr>
 				</thead>
-<!--				POPULATED DATA WITH TYMELEAF -->
+				<!--				POPULATED DATA WITH TYMELEAF -->
 				<tbody class="table-group-divider">
 					<tr th:each="category : ${investmentCategories}">
 						<th scope="row">
-							<a th:href="@{/investments/by_category/{category}(category=${category})}" class="btn btn-outline-dark" th:text="${category}"> </a>
+							<a th:href="@{/investments/by_category/{category}(category=${category})}"
+								class="btn btn-outline-dark" th:text="${category}"> </a>
 						</th>
-						
-						<td th:text="${#strings.replace(#numbers.formatCurrency(categoryTotals.get(category)[0]), '.00', '')}"></td>
+
+						<td
+							th:text="${#strings.replace(#numbers.formatCurrency(categoryTotals.get(category)[0]), '.00', '')}">
+						</td>
 						<td th:text="${categoryTotals.get(category)[1]} + '%'"></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-<!--		TABLE FOR TYPES -->
+		<!--		TABLE FOR TYPES -->
 		<div class="container mt-auto table-responsive">
 			<table class="table mt-4 table-hover">
 				<caption>Investments by Type</caption>
@@ -75,20 +70,22 @@
 						<th scope="col">% of Porffolio</th>
 					</tr>
 				</thead>
-<!--				POPULATED DATA WITH TYMELEAF -->
+				<!--				POPULATED DATA WITH TYMELEAF -->
 				<tbody class="table-group-divider">
 					<tr th:each="type : ${investmentTypes}">
 						<th scope="row">
-							<a th:href="@{/investments/by_type/{type}(type=${type})}" class="btn btn-outline-dark" th:text="${type}"> </a>
+							<a th:href="@{/investments/by_type/{type}(type=${type})}" class="btn btn-outline-dark"
+								th:text="${type}"> </a>
 						</th>
-						
-						<td th:text="${#strings.replace(#numbers.formatCurrency(typeTotals.get(type)[0]), '.00', '')}"></td>
+
+						<td th:text="${#strings.replace(#numbers.formatCurrency(typeTotals.get(type)[0]), '.00', '')}">
+						</td>
 						<td th:text="${typeTotals.get(type)[1] + '%'}"></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-<!--		BACK BUTTON -->
+		<!--		BACK BUTTON -->
 		<div class="d-flex justify-content-center">
 			<a th:href="@{/investments/}" class="btn btn-outline-dark btn-lg btn-block">Back</a>
 		</div>

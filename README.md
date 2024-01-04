@@ -4,7 +4,7 @@
 
 ## Overview
 
-This Spring Boot application helps you manage your investment portfolio effectively. This is the result of my incursion to Springboot
+This Spring Boot application helps you manage your investment portfolio effectively. This is the result of my incursion to Spring Boot framework.
 
 **Key Features:**
 
